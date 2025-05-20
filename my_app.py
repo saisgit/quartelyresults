@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 
 # Define Twitter handle and stock list
-twitter_handle = "elonmusk"
+twitter_handle = "REDBOXINDIA"
 stock_list = ["DIXON", "DIVISLAB"]
 # earnings_dates = {"TSLA": "2025-05-15", "AAPL": "2025-05-20", "NVDA": "2025-05-25"}
 
