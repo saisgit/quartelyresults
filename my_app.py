@@ -1,9 +1,6 @@
 import snscrape.modules.twitter as sntwitter
 import pandas as pd
 import streamlit as st
-import ssl
-ssl._create_default_https_context = ssl._create_unverified_context
-
 
 # Define Twitter handle and stock list
 #twitter_handle = "from:REDBOXINDIA"
