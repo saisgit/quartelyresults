@@ -3,71 +3,99 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+from datetime import datetime, timedelta
 
-# App title
-st.title("Stock Price Action Analysis")
-st.sidebar.header("Stock Settings")
+st.set_page_config(layout="wide")
+st.title("📈 Price Action Stock Analyzer")
 
-# User inputs
-ticker = st.sidebar.text_input("Enter Stock Ticker", "AAPL")
+# Sidebar Inputs
+symbol = st.sidebar.text_input("Stock Symbol", value="AAPL")
 timeframe = st.sidebar.selectbox("Select Timeframe", ["Daily", "Hourly"])
+lookback_days = st.sidebar.slider("Lookback Period (days)", 30, 365, 90)
 
-# Fetch stock data
-if timeframe == "Daily":
-    data = yf.download(ticker, period="60d", interval="1d")
-    st.write(data)
-else:
-    data = yf.download(ticker, period="7d", interval="60m")
+# Download Data
+interval = '1d' if timeframe == "Daily" else '1h'
+start = datetime.now() - timedelta(days=lookback_days)
+df = yf.download(symbol, start=start, interval=interval)
 
-data.dropna(inplace=True)
-st.write(data)
-# Identify pivot points for support & resistance
-def find_pivots(df, window=5):
-    supports, resistances = [], []
+if df.empty:
+    st.error("No data found. Check the symbol or timeframe.")
+    st.stop()
+
+df.dropna(inplace=True)
+
+# ---- Price Action Logic ----
+
+def find_support_resistance(df, window=3):
+    supports = []
+    resistances = []
+
     for i in range(window, len(df) - window):
-        current_low = df["Low"].iloc[i]
-        current_high = df["High"].iloc[i]
-        window_low = df["Low"].iloc[i - window : i + window + 1].min()
-        window_high = df["High"].iloc[i - window : i + window + 1].max()
-        if np.isclose(current_low, window_low).any():
-            supports.append((df.index[i], current_low))
-        if np.isclose(current_high, window_high).any():
-            resistances.append((df.index[i], current_high))
+        is_support = all(df['Low'].iloc[i] < df['Low'].iloc[i - j] and df['Low'].iloc[i] < df['Low'].iloc[i + j] for j in range(1, window + 1))
+        is_resistance = all(df['High'].iloc[i] > df['High'].iloc[i - j] and df['High'].iloc[i] > df['High'].iloc[i + j] for j in range(1, window + 1))
+
+        if is_support:
+            supports.append((df.index[i], df['Low'].iloc[i]))
+        if is_resistance:
+            resistances.append((df.index[i], df['High'].iloc[i]))
+
     return supports, resistances
 
-supports, resistances = find_pivots(data)
+def find_trendlines(supports, resistances):
+    def linear_fit(points):
+        x = np.array([(p[0] - points[0][0]).days if isinstance(p[0], pd.Timestamp) else (p[0] - points[0][0]).total_seconds()/3600 for p in points])
+        y = np.array([p[1] for p in points])
+        A = np.vstack([x, np.ones(len(x))]).T
+        m, c = np.linalg.lstsq(A, y, rcond=None)[0]
+        return m, c, x
 
-# Compute trend lines
-def compute_trend_line(pivots, total_points):
-    if len(pivots) < 2:
-        return None
-    x = np.array([data.index.get_loc(time) for time, price in pivots])
-    y = np.array([price for time, price in pivots])
-    slope, intercept = np.polyfit(x, y, 1)
-    x_line = np.arange(total_points)
-    y_line = slope * x_line + intercept
-    return y_line
+    support_trendline = linear_fit(supports[-3:]) if len(supports) >= 3 else None
+    resistance_trendline = linear_fit(resistances[-3:]) if len(resistances) >= 3 else None
+    return support_trendline, resistance_trendline
 
-support_trend = compute_trend_line(supports, len(data))
-resistance_trend = compute_trend_line(resistances, len(data))
+supports, resistances = find_support_resistance(df)
+support_trend, resistance_trend = find_trendlines(supports, resistances)
 
-# Plot chart
+# ---- Plotting ----
+
 fig = go.Figure()
-fig.add_trace(go.Candlestick(x=data.index, open=data["Open"], high=data["High"], low=data["Low"], close=data["Close"], name="Price"))
 
-# Add support and resistance levels
-for time, price in supports:
-    fig.add_hline(y=price, line_dash="dash", line_color="green", annotation_text="Support")
-for time, price in resistances:
-    fig.add_hline(y=price, line_dash="dash", line_color="red", annotation_text="Resistance")
+# Candlesticks
+fig.add_trace(go.Candlestick(
+    x=df.index,
+    open=df['Open'],
+    high=df['High'],
+    low=df['Low'],
+    close=df['Close'],
+    name="Candlestick"
+))
 
-# Plot trend lines if available
-if support_trend is not None:
-    fig.add_trace(go.Scatter(x=data.index, y=support_trend, mode="lines", name="Support Trend", line=dict(color="blue")))
-if resistance_trend is not None:
-    fig.add_trace(go.Scatter(x=data.index, y=resistance_trend, mode="lines", name="Resistance Trend", line=dict(color="orange")))
+# Support Zones
+for ts, level in supports:
+    fig.add_shape(type="line", x0=ts, y0=level, x1=df.index[-1], y1=level,
+                  line=dict(color="green", width=1, dash="dot"))
+    fig.add_annotation(x=ts, y=level, text="Support", showarrow=False, yshift=10, font=dict(color="green"))
 
-fig.update_layout(title=f"{ticker} Price Action Analysis ({timeframe})", xaxis_title="Date", yaxis_title="Price", xaxis_rangeslider_visible=False)
+# Resistance Zones
+for ts, level in resistances:
+    fig.add_shape(type="line", x0=ts, y0=level, x1=df.index[-1], y1=level,
+                  line=dict(color="red", width=1, dash="dot"))
+    fig.add_annotation(x=ts, y=level, text="Resistance", showarrow=False, yshift=-10, font=dict(color="red"))
 
-# Display chart
+# Trendlines
+if support_trend:
+    m, c, x_vals = support_trend
+    trend_y = m * np.arange(len(df)) + c
+    fig.add_trace(go.Scatter(x=df.index, y=trend_y, line=dict(color="green", dash="dash"), name="Support Trendline"))
+
+if resistance_trend:
+    m, c, x_vals = resistance_trend
+    trend_y = m * np.arange(len(df)) + c
+    fig.add_trace(go.Scatter(x=df.index, y=trend_y, line=dict(color="red", dash="dash"), name="Resistance Trendline"))
+
+fig.update_layout(title=f"{symbol.upper()} - {timeframe} Chart with Price Action Analysis",
+                  xaxis_title="Date",
+                  yaxis_title="Price",
+                  height=800)
+
 st.plotly_chart(fig, use_container_width=True)
