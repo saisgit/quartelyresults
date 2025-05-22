@@ -15,12 +15,22 @@ def get_stock_data(symbol, timeframe):
     df.dropna(inplace=True)
     return df
 
-def find_support_resistance(df, order=5):
+def find_support_resistance1(df, order=5):
     local_min = argrelextrema(df['Low'].values, np.less_equal, order=order)[0]
     local_max = argrelextrema(df['High'].values, np.greater_equal, order=order)[0]
     support_levels = df.iloc[local_min][['Low']].rename(columns={'Low': 'Support'})
     resistance_levels = df.iloc[local_max][['High']].rename(columns={'High': 'Resistance'})
     return support_levels, resistance_levels
+    
+def find_support_resistance(df, order=5):
+    lows = df['Low'].values
+    highs = df['High'].values
+    local_min = argrelextrema(lows, np.less_equal, order=order)[0]
+    local_max = argrelextrema(highs, np.greater_equal, order=order)[0]
+    support_levels = pd.DataFrame(index=df.index[local_min], data={'Support': lows[local_min]})
+    resistance_levels = pd.DataFrame(index=df.index[local_max], data={'Resistance': highs[local_max]})
+    return support_levels, resistance_levels
+
 
 def calculate_trendlines(df):
     trendlines = []
@@ -82,14 +92,22 @@ st.title("📈 Stock Price Action Dashboard")
 
 symbol = st.text_input("Enter Stock Symbol (e.g., AAPL, TSLA):", value="AAPL")
 timeframe = st.selectbox("Select Timeframe:", ["Daily", "Hourly"])
+# ---------------- Streamlit UI ----------------
 
-if symbol:
-    df = get_stock_data(symbol, timeframe)
-    print(df)
-    support, resistance = find_support_resistance(df)
-    print(support)
-    trendlines = calculate_trendlines(df)
-    fig = plot_chart(df, support, resistance, trendlines)
-    st.plotly_chart(fig, use_container_width=True)
-else:
-    st.warning("Please enter a valid stock symbol.")
+st.set_page_config(layout="wide")
+st.title("📈 Stock Price Action Dashboard")
+
+with st.form("stock_form"):
+    symbol = st.text_input("Enter Stock Symbol (e.g., AAPL, TSLA):", value="AAPL")
+    timeframe = st.selectbox("Select Timeframe:", ["Daily", "Hourly"])
+    submitted = st.form_submit_button("Submit")
+
+if submitted:
+    try:
+        df = get_stock_data(symbol, timeframe)
+        support, resistance = find_support_resistance(df)
+        trendlines = calculate_trendlines(df)
+        fig = plot_chart(df, support, resistance, trendlines)
+        st.plotly_chart(fig, use_container_width=True)
+    except Exception as e:
+        st.error(f"⚠️ Error: {e}")
