@@ -14,12 +14,12 @@ timeframe = st.sidebar.selectbox("Select Timeframe", ["Daily", "Hourly"])
 
 # Fetch stock data
 if timeframe == "Daily":
-    data = yf.download(ticker, period="1y", interval="1d")
+    data = yf.download(ticker, period="60d", interval="1d")
 else:
-    data = yf.download(ticker, period="60d", interval="60m")
+    data = yf.download(ticker, period="7d", interval="60m")
 
 data.dropna(inplace=True)
-
+st.write(data)
 # Identify pivot points for support & resistance
 def find_pivots(df, window=5):
     supports, resistances = [], []
