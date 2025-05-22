@@ -13,7 +13,7 @@ def get_stock_data(symbol, timeframe):
     period = "6mo" if timeframe == "Daily" else "7d"
     df = yf.download(symbol, period=period, interval=interval)
     df.dropna(inplace=True)
-    print(df)
+    st.write(df)
     return df
 
 # def find_support_resistance1(df, order=5):
@@ -114,7 +114,7 @@ if submitted:
         df = get_stock_data(symbol, timeframe)
         print(df)
         support, resistance = find_support_resistance(df)
-        print(support)
+        #print(support)
         trendlines = calculate_trendlines(df)
         fig = plot_chart(df, support, resistance, trendlines)
         st.plotly_chart(fig, use_container_width=True)
