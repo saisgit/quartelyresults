@@ -34,15 +34,6 @@ def find_support_resistance(df, order=5):
 
     return support_levels, resistance_levels
     
-def find_support_resistance(df, order=5):
-    lows = df['Low'].values
-    highs = df['High'].values
-    local_min = argrelextrema(lows, np.less_equal, order=order)[0]
-    local_max = argrelextrema(highs, np.greater_equal, order=order)[0]
-    support_levels = pd.DataFrame(index=df.index[local_min], data={'Support': lows[local_min]})
-    resistance_levels = pd.DataFrame(index=df.index[local_max], data={'Resistance': highs[local_max]})
-    return support_levels, resistance_levels
-
 
 def calculate_trendlines(df):
     trendlines = []
