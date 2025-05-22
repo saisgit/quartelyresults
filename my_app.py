@@ -28,7 +28,7 @@ def find_pivots(df, window=5):
         current_high = df["High"].iloc[i]
         window_low = df["Low"].iloc[i - window : i + window + 1].min()
         window_high = df["High"].iloc[i - window : i + window + 1].max()
-        if np.isclose(current_low, window_low).nny():
+        if np.isclose(current_low, window_low).any():
             supports.append((df.index[i], current_low))
         if np.isclose(current_high, window_high).any():
             resistances.append((df.index[i], current_high))
