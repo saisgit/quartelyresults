@@ -22,6 +22,17 @@ def get_stock_data(symbol, timeframe):
 #     support_levels = df.iloc[local_min][['Low']].rename(columns={'Low': 'Support'})
 #     resistance_levels = df.iloc[local_max][['High']].rename(columns={'High': 'Resistance'})
 #     return support_levels, resistance_levels
+# def find_support_resistance(df, order=5):
+#     lows = df['Low'].values
+#     highs = df['High'].values
+
+#     local_min = argrelextrema(lows, np.less_equal, order=order)[0]
+#     local_max = argrelextrema(highs, np.greater_equal, order=order)[0]
+
+#     support_levels = pd.DataFrame({'Support': lows[local_min].flatten()}, index=df.index[local_min])
+#     resistance_levels = pd.DataFrame({'Resistance': highs[local_max].flatten()}, index=df.index[local_max])
+
+#     return support_levels, resistance_levels
 def find_support_resistance(df, order=5):
     lows = df['Low'].values
     highs = df['High'].values
@@ -33,6 +44,7 @@ def find_support_resistance(df, order=5):
     resistance_levels = pd.DataFrame({'Resistance': highs[local_max].flatten()}, index=df.index[local_max])
 
     return support_levels, resistance_levels
+
     
 
 def calculate_trendlines(df):
