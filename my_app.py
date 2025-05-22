@@ -93,14 +93,16 @@ st.title("📈 Stock Price Action Dashboard")
 # ---------------- Streamlit UI ----------------
 
 with st.form("stock_form"):
-    symbol = st.text_input("Enter Stock Symbol (e.g., AAPL, TSLA):", value="AAPL")
+    symbol = st.text_input("Enter Stock Symbol (e.g., AAPL, TSLA):", value="DIVISLAB.NS")
     timeframe = st.selectbox("Select Timeframe:", ["Daily", "Hourly"])
     submitted = st.form_submit_button("Submit")
 
 if submitted:
     try:
         df = get_stock_data(symbol, timeframe)
+        print(df)
         support, resistance = find_support_resistance(df)
+        print(support)
         trendlines = calculate_trendlines(df)
         fig = plot_chart(df, support, resistance, trendlines)
         st.plotly_chart(fig, use_container_width=True)
