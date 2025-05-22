@@ -90,12 +90,7 @@ def plot_chart(df, support, resistance, trendlines):
 st.set_page_config(layout="wide")
 st.title("📈 Stock Price Action Dashboard")
 
-symbol = st.text_input("Enter Stock Symbol (e.g., AAPL, TSLA):", value="AAPL")
-timeframe = st.selectbox("Select Timeframe:", ["Daily", "Hourly"])
 # ---------------- Streamlit UI ----------------
-
-st.set_page_config(layout="wide")
-st.title("📈 Stock Price Action Dashboard")
 
 with st.form("stock_form"):
     symbol = st.text_input("Enter Stock Symbol (e.g., AAPL, TSLA):", value="AAPL")
