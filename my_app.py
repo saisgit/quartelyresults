@@ -15,6 +15,7 @@ timeframe = st.sidebar.selectbox("Select Timeframe", ["Daily", "Hourly"])
 # Fetch stock data
 if timeframe == "Daily":
     data = yf.download(ticker, period="60d", interval="1d")
+    st.write(data)
 else:
     data = yf.download(ticker, period="7d", interval="60m")
 
