@@ -16,7 +16,16 @@ lookback_days = st.sidebar.slider("Lookback Period (days)", 30, 365, 90)
 # Download Data
 interval = '1d' if timeframe == "Daily" else '1h'
 start = datetime.now() - timedelta(days=lookback_days)
-df = yf.download(symbol, start=start, interval=interval)
+#df = yf.download(symbol, start=start, interval=interval)
+
+try:
+    df = yf.download(symbol, start=start, interval=interval, auto_adjust=True, progress=False)
+    if df.empty:
+        raise ValueError("No data returned.")
+except Exception as e:
+    st.error(f"Error fetching data for {symbol}: {e}")
+    st.stop()
+
 
 if df.empty:
     st.error("No data found. Check the symbol or timeframe.")
