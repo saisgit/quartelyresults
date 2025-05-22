@@ -55,10 +55,10 @@ def cluster_levels(pivots, threshold):
     for _, price in pivots:
         if not levels:
             levels.append(price)
-        else:
+        #else:
             # Only add a new level if it differs significantly from existing levels
-            if not any(abs(price - lvl) < threshold for lvl in levels):
-                levels.append(price)
+            #if not any(abs(price - lvl) < threshold for lvl in levels):
+            #    levels.append(price)
     return levels
 
 def compute_trend_line(pivots, total_points):
