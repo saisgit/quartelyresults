@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
+# App title
 st.title("Stock Price Action Analysis")
 st.sidebar.header("Stock Settings")
 
@@ -55,9 +56,9 @@ fig.add_trace(go.Candlestick(x=data.index, open=data["Open"], high=data["High"],
 
 # Add support and resistance levels
 for time, price in supports:
-    fig.add_hline(y=price, line_dash="dash", line_color="green")
+    fig.add_hline(y=price, line_dash="dash", line_color="green", annotation_text="Support")
 for time, price in resistances:
-    fig.add_hline(y=price, line_dash="dash", line_color="red")
+    fig.add_hline(y=price, line_dash="dash", line_color="red", annotation_text="Resistance")
 
 # Plot trend lines if available
 if support_trend is not None:
