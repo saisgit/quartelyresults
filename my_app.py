@@ -22,18 +22,18 @@ def get_stock_data(ticker, period, interval):
             proxyServer = urllib.request.getproxies()['http']
         except KeyError:
             proxyServer = ""
-        tday = datetime.strptime('21052025', '%d%m%Y').date() + timedelta(days=1)
-        startDay = tday - timedelta(days=45)
+        tday = datetime.strptime('23052025', '%d%m%Y').date() + timedelta(days=1)
+        startDay = tday - timedelta(days=period)
         data = yf.download(
                 tickers=ticker+".NS", start=startDay, end=tday,
                 # period=period,
-                interval='1d',
+                interval=interval,
                 proxy=proxyServer,
                 progress=False,
                 multi_level_index = False,
                 timeout=10
             )
-        st.write(data)
+        #st.write(data)
         if data.empty:
             st.error(f"No data found for {ticker} with period {period} and interval {interval}. Please check the ticker symbol or selected period/interval.")
             return None
@@ -187,8 +187,8 @@ timeframe_option = st.sidebar.radio(
 )
 
 period_map = {
-    'Daily': '45d', # 1 year of daily data
-    'Hourly': '45d' # 60 days of hourly data (yfinance max for 1h interval)
+    'Daily': '1y', # 1 year of daily data
+    'Hourly': '60d' # 60 days of hourly data (yfinance max for 1h interval)
 }
 interval_map = {
     'Daily': '1d',
@@ -235,4 +235,4 @@ else:
     st.info("Please enter a stock ticker in the sidebar to get started.")
 
 st.markdown("---")
-st.markdown("Developed by a Senior Developer with 25 years of experience in technical analysis and financial data visualization.")
+st.markdown("Developed by a Sai.")
