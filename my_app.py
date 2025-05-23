@@ -14,7 +14,7 @@ st.set_page_config(layout="wide", page_title="Advanced Technical Analysis Dashbo
 # --- Helper Functions ---
 
 #@st.cache_data(ttl=3600) # Cache data for 1 hour
-def get_stock_data(ticker, period, interval):
+def get_stock_data(ticker, period, interval,date):
     """Fetches stock data from Yahoo Finance."""
     try:
         #data = yf.download(ticker, period=period, interval=interval)
@@ -22,7 +22,7 @@ def get_stock_data(ticker, period, interval):
             proxyServer = urllib.request.getproxies()['http']
         except KeyError:
             proxyServer = ""
-        tday = datetime.strptime('23052025', '%d%m%Y').date() + timedelta(days=1)
+        tday = datetime.strptime(date, '%d%m%Y').date() + timedelta(days=1)
         startDay = tday - timedelta(days=int(period))
         data = yf.download(
                 tickers=ticker+".NS", start=startDay, end=tday,
@@ -180,14 +180,14 @@ st.title("Stock Technical Analysis Dashboard")
 # Sidebar for user inputs
 st.sidebar.header("Stock Selection & Settings")
 stock_ticker = st.sidebar.text_input("Enter Stock Ticker (e.g., sbin)", "DIVISLAB").upper()
-
+current_day = st.sidebar.text_input("Enter current_day (e.g., 23052025)", "23052025").upper()
 timeframe_option = st.sidebar.radio(
     "Select Timeframe",
     ('Daily', 'Hourly')
 )
 
 period_map = {
-    'Daily': '200', # 1 year of daily data
+    'Daily': '60', # 1 year of daily data
     'Hourly': '60' # 60 days of hourly data (yfinance max for 1h interval)
 }
 interval_map = {
@@ -207,7 +207,7 @@ sr_window = st.sidebar.slider("S/R Detection Window (candles)", 5, 50, 10)
 # Fetch data
 if stock_ticker:
     st.subheader(f"Analyzing {stock_ticker}")
-    data = get_stock_data(stock_ticker, selected_period, selected_interval)
+    data = get_stock_data(stock_ticker, selected_period, selected_interval,current_day)
 
     if data is not None and not data.empty:
         # Calculate Technical Indicators using pandas_ta
