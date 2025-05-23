@@ -7,6 +7,7 @@ import pandas_ta as ta # For technical indicators and patterns
 from scipy.signal import savgol_filter
 import numpy as np
 import urllib
+from datetime import datetime, timedelta
 # --- Configuration ---
 st.set_page_config(layout="wide", page_title="Advanced Technical Analysis Dashboard")
 
@@ -18,9 +19,11 @@ def get_stock_data(ticker, period, interval):
     try:
         #data = yf.download(ticker, period=period, interval=interval)
         # proxyServer = urllib.request.getproxies()['https']
+        tday = datetime.strptime('23052025', '%d%m%Y').date() + timedelta(days=1)
+        startDay = tday - timedelta(days=45)
         data = yf.download(
-                tickers=ticker+".NS", # start=startDay, end=tday,
-                period=period,
+                tickers=ticker+".NS", start=startDay, end=tday,
+                # period=period,
                 interval=interval,
                 # proxy=proxyServer,
                 progress=False,
