@@ -12,11 +12,22 @@ st.set_page_config(layout="wide", page_title="Advanced Technical Analysis Dashbo
 
 # --- Helper Functions ---
 
-@st.cache_data(ttl=3600) # Cache data for 1 hour
+#@st.cache_data(ttl=3600) # Cache data for 1 hour
 def get_stock_data(ticker, period, interval):
     """Fetches stock data from Yahoo Finance."""
     try:
-        data = yf.download(ticker, period=period, interval=interval)
+        #data = yf.download(ticker, period=period, interval=interval)
+        proxyServer = urllib.request.getproxies()['http']
+        data = yf.download(
+                tickers=ticker+".NS", # start=startDay, end=tday,
+                period=period,
+                interval=interval,
+                proxy=proxyServer,
+                progress=False,
+                multi_level_index = False,
+                timeout=10
+            )
+        st.write(data)
         if data.empty:
             st.error(f"No data found for {ticker} with period {period} and interval {interval}. Please check the ticker symbol or selected period/interval.")
             return None
@@ -162,7 +173,7 @@ st.title("Stock Technical Analysis Dashboard")
 
 # Sidebar for user inputs
 st.sidebar.header("Stock Selection & Settings")
-stock_ticker = st.sidebar.text_input("Enter Stock Ticker (e.g., AAPL)", "AAPL").upper()
+stock_ticker = st.sidebar.text_input("Enter Stock Ticker (e.g., sbin)", "DIVISLAB").upper()
 
 timeframe_option = st.sidebar.radio(
     "Select Timeframe",
@@ -170,8 +181,8 @@ timeframe_option = st.sidebar.radio(
 )
 
 period_map = {
-    'Daily': '1y', # 1 year of daily data
-    'Hourly': '60d' # 60 days of hourly data (yfinance max for 1h interval)
+    'Daily': '6mo', # 1 year of daily data
+    'Hourly': '45d' # 60 days of hourly data (yfinance max for 1h interval)
 }
 interval_map = {
     'Daily': '1d',
