@@ -18,14 +18,17 @@ def get_stock_data(ticker, period, interval):
     """Fetches stock data from Yahoo Finance."""
     try:
         #data = yf.download(ticker, period=period, interval=interval)
-        # proxyServer = urllib.request.getproxies()['https']
+        try:
+            proxyServer = urllib.request.getproxies()['http']
+        except KeyError:
+            proxyServer = ""
         tday = datetime.strptime('23052025', '%d%m%Y').date() + timedelta(days=1)
         startDay = tday - timedelta(days=45)
         data = yf.download(
                 tickers=ticker+".NS", start=startDay, end=tday,
                 # period=period,
                 interval='1d',
-                # proxy=proxyServer,
+                proxy=proxyServer,
                 progress=False,
                 multi_level_index = False,
                 timeout=10
