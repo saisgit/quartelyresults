@@ -24,10 +24,10 @@ def get_stock_data(ticker, period, interval):
         data = yf.download(
                 tickers=ticker+".NS", start=startDay, end=tday,
                 # period=period,
-                interval=interval,
+                interval='1d',
                 # proxy=proxyServer,
                 progress=False,
-                # multi_level_index = False,
+                multi_level_index = False,
                 timeout=10
             )
         st.write(data)
