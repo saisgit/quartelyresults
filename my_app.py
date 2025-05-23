@@ -6,7 +6,7 @@ from plotly.subplots import make_subplots
 import pandas_ta as ta # For technical indicators and patterns
 from scipy.signal import savgol_filter
 import numpy as np
-
+import urllib
 # --- Configuration ---
 st.set_page_config(layout="wide", page_title="Advanced Technical Analysis Dashboard")
 
