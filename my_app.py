@@ -132,19 +132,19 @@ def plot_candlestick_with_indicators(df, ticker, timeframe, show_patterns=False,
         fig.add_hline(y=resistance, line_dash="solid", line_color="crimson", row=1, col=1, annotation_text=f"Resistance: {resistance:.2f}", annotation_position="top right")
 
     # Chart Patterns (basic visualization - needs more robust pattern detection)
-    if show_patterns:
-        # Example: Plotting 'Hammer' pattern if detected by pandas_ta
-        # pandas_ta adds columns like 'CDL_HAMMER' with values like 100 (bullish) or -100 (bearish)
-        # We'll just mark where it appears. A more sophisticated approach would highlight candles.
-        hammer_patterns = df[df['CDL_HAMMER'] != 0]
-        if not hammer_patterns.empty:
-            for idx, row in hammer_patterns.iterrows():
-                fig.add_annotation(x=idx, y=row['Low'] * 0.98, text="Hammer", showarrow=True, arrowhead=1, row=1, col=1)
+    # if show_patterns:
+    #     # Example: Plotting 'Hammer' pattern if detected by pandas_ta
+    #     # pandas_ta adds columns like 'CDL_HAMMER' with values like 100 (bullish) or -100 (bearish)
+    #     # We'll just mark where it appears. A more sophisticated approach would highlight candles.
+    #     hammer_patterns = df[df['CDL_HAMMER'] != 0]
+    #     if not hammer_patterns.empty:
+    #         for idx, row in hammer_patterns.iterrows():
+    #             fig.add_annotation(x=idx, y=row['Low'] * 0.98, text="Hammer", showarrow=True, arrowhead=1, row=1, col=1)
 
-        doji_patterns = df[df['CDL_DOJI'] != 0]
-        if not doji_patterns.empty:
-            for idx, row in doji_patterns.iterrows():
-                fig.add_annotation(x=idx, y=row['High'] * 1.02, text="Doji", showarrow=True, arrowhead=1, row=1, col=1)
+    #     doji_patterns = df[df['CDL_DOJI'] != 0]
+    #     if not doji_patterns.empty:
+    #         for idx, row in doji_patterns.iterrows():
+    #             fig.add_annotation(x=idx, y=row['High'] * 1.02, text="Doji", showarrow=True, arrowhead=1, row=1, col=1)
 
 
     fig.update_layout(
