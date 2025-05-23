@@ -119,10 +119,10 @@ def plot_candlestick_with_indicators(df, ticker, timeframe, show_patterns=False,
         fig.add_hline(y=30, line_dash="dash", line_color="green", row=3, col=1, annotation_text="Oversold", annotation_position="bottom left")
 
     # Add MACD
-    if 'MACD_12_26_9' in df.columns and 'MACDs_12_26_9' in df.columns and 'MACDh_12_26_9' in df.columns:
-        fig.add_trace(go.Scatter(x=df.index, y=df['MACD_12_26_9'], mode='lines', name='MACD', line=dict(color='fuchsia', width=1)), row=3, col=1)
-        fig.add_trace(go.Scatter(x=df.index, y=df['MACDs_12_26_9'], mode='lines', name='Signal', line=dict(color='red', width=1)), row=3, col=1)
-        fig.add_trace(go.Bar(x=df.index, y=df['MACDh_12_26_9'], name='Histogram', marker_color='rgba(128,0,128,0.5)'), row=3, col=1)
+    # if 'MACD_12_26_9' in df.columns and 'MACDs_12_26_9' in df.columns and 'MACDh_12_26_9' in df.columns:
+    #     fig.add_trace(go.Scatter(x=df.index, y=df['MACD_12_26_9'], mode='lines', name='MACD', line=dict(color='fuchsia', width=1)), row=3, col=1)
+    #     fig.add_trace(go.Scatter(x=df.index, y=df['MACDs_12_26_9'], mode='lines', name='Signal', line=dict(color='red', width=1)), row=3, col=1)
+    #     fig.add_trace(go.Bar(x=df.index, y=df['MACDh_12_26_9'], name='Histogram', marker_color='rgba(128,0,128,0.5)'), row=3, col=1)
 
 
     # Add Support and Resistance lines
