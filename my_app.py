@@ -187,8 +187,8 @@ timeframe_option = st.sidebar.radio(
 )
 
 period_map = {
-    'Daily': '1y', # 1 year of daily data
-    'Hourly': '60d' # 60 days of hourly data (yfinance max for 1h interval)
+    'Daily': '200', # 1 year of daily data
+    'Hourly': '60' # 60 days of hourly data (yfinance max for 1h interval)
 }
 interval_map = {
     'Daily': '1d',
