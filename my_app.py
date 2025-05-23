@@ -22,7 +22,7 @@ def get_stock_data(ticker, period, interval):
             proxyServer = urllib.request.getproxies()['http']
         except KeyError:
             proxyServer = ""
-        tday = datetime.strptime('23052025', '%d%m%Y').date() + timedelta(days=1)
+        tday = datetime.strptime('21052025', '%d%m%Y').date() + timedelta(days=1)
         startDay = tday - timedelta(days=45)
         data = yf.download(
                 tickers=ticker+".NS", start=startDay, end=tday,
