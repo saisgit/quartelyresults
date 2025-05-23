@@ -24,7 +24,7 @@ def get_stock_data(ticker, period, interval):
                 interval=interval,
                 # proxy=proxyServer,
                 progress=False,
-                multi_level_index = False,
+                # multi_level_index = False,
                 timeout=10
             )
         st.write(data)
