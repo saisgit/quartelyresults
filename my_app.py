@@ -218,9 +218,9 @@ if stock_ticker:
         # data.ta.macd(append=True)
 
         # Detect Chart Patterns
-        if show_patterns_toggle:
-            # Add various candlestick patterns. pandas_ta automatically adds columns like 'CDL_HAMMER'
-            data.ta.cdl_all(append=True) # Detect all candlestick patterns
+        # if show_patterns_toggle:
+        #     # Add various candlestick patterns. pandas_ta automatically adds columns like 'CDL_HAMMER'
+        #     data.ta.cdl_all(append=True) # Detect all candlestick patterns
 
         # Detect Support and Resistance
         supports, resistances = [], []
