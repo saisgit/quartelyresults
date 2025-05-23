@@ -107,10 +107,10 @@ def plot_candlestick_with_indicators(df, ticker, timeframe, show_patterns=False,
         fig.add_trace(go.Scatter(x=df.index, y=df['SMA_50'], mode='lines', name='SMA 50', line=dict(color='orange', width=1)), row=1, col=1)
 
     # Add Bollinger Bands
-    if 'BBL_5_2.0' in df.columns:
-        fig.add_trace(go.Scatter(x=df.index, y=df['BBL_5_2.0'], mode='lines', name='BB Lower', line=dict(color='gray', width=1, dash='dot')), row=1, col=1)
-        fig.add_trace(go.Scatter(x=df.index, y=df['BBM_5_2.0'], mode='lines', name='BB Middle', line=dict(color='purple', width=1, dash='dot')), row=1, col=1)
-        fig.add_trace(go.Scatter(x=df.index, y=df['BBU_5_2.0'], mode='lines', name='BB Upper', line=dict(color='gray', width=1, dash='dot')), row=1, col=1)
+    if 'BBL_20_2.0' in df.columns:
+        fig.add_trace(go.Scatter(x=df.index, y=df['BBL_20_2.0'], mode='lines', name='BB Lower', line=dict(color='yellow', width=1, dash='dot')), row=1, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df['BBM_20_2.0'], mode='lines', name='BB Middle', line=dict(color='purple', width=1, dash='dot')), row=1, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df['BBU_20_2.0'], mode='lines', name='BB Upper', line=dict(color='yellow', width=1, dash='dot')), row=1, col=1)
 
     # Add RSI
     if 'RSI_14' in df.columns:
@@ -211,9 +211,9 @@ if stock_ticker:
 
     if data is not None and not data.empty:
         # Calculate Technical Indicators using pandas_ta
-        data.ta.sma(length=20, append=True)
-        data.ta.sma(length=50, append=True)
-        data.ta.bbands(append=True) # Bollinger Bands
+        #data.ta.sma(length=20, append=True)
+        #data.ta.sma(length=50, append=True)
+        data.ta.bbands(close='Close', length=20, std=2, append=True) # Bollinger Bands
         data.ta.rsi(append=True)
         # data.ta.macd(append=True)
 
