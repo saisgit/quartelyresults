@@ -215,7 +215,7 @@ if stock_ticker:
         data.ta.sma(length=50, append=True)
         data.ta.bbands(append=True) # Bollinger Bands
         data.ta.rsi(append=True)
-        data.ta.macd(append=True)
+        # data.ta.macd(append=True)
 
         # Detect Chart Patterns
         if show_patterns_toggle:
