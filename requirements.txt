@@ -1,7 +1,11 @@
-streamlit==1.33.0
-yfinance
+Streamlit==1.31.0
+setuptools
 pandas
-plotly==5.20.0
-numpy==1.26.4
-scipy==1.13.0
-pandas_ta==0.3.14b
+requests
+st-gsheets-connection
+pandasql
+yfinance
+pandas_ta
+tradingview_ta
+pandas_market_calendars
+streamlit_autorefresh
