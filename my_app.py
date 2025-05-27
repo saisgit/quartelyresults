@@ -14,7 +14,7 @@ st.set_page_config(layout="wide", page_title="Stock Screener (Prev Day BB Filter
 def get_stock_data(ticker, period, interval):
     """Fetches historical stock data using yfinance."""
     try:
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker(ticker+".NS")
         # yfinance often returns data with timezone. Make it timezone-aware.
         data = stock.history(period=period, interval=interval)
         if data.empty:
@@ -261,14 +261,16 @@ st.markdown("Use the sidebar to define your screening criteria and find stocks t
 st.sidebar.header("Stock Screener Criteria")
 
 # Example Indian stock tickers (replace with your desired list)
-default_tickers = [
-    "INDIGO.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "ICICIBANK.NS",
-    "SBIN.NS", "BHARTIARTL.NS", "ITC.NS", "LT.NS", "KOTAKBANK.NS",
-    "AXISBANK.NS", "BAJFINANCE.NS", "ASIANPAINT.NS", "MARUTI.NS",
-    "NESTLEIND.NS", "ULTRACEMCO.NS"
-]
+default_tickers = ['COLPAL','BRITANNIA','HAL', 'LTIM', 'JINDALSTEL', 'INFY', 'OBEROIRLTY', 
+                   'POLYCAB', 'ABB', 'JSWSTEEL',  'TCS', 'NAVINFLUOR', 'DEEPAKNTR', 'RELIANCE',
+                   'SBILIFE', 'NESTLEIND', 'TITAN', 'PERSISTENT', 'ICICIBANK', 'HINDUNILVR',
+                   'ALKEM', 'HDFCBANK', 'BHARTIARTL', 'COFORGE', 'PVRINOX', 'MRF', 'APOLLOHOSP',
+                   'INDIGO', 'KOTAKBANK', 'BAJAJFINSV', 'ABBOTINDIA', 'SBIN', 'GRASIM', 'MARUTI',
+                   'DIVISLAB',  'BAJFINANCE', 'MCX', 'EICHERMOT', 'SIEMENS', 'M&M', 'ACC', 'TVSMOTOR', 
+                   'TORNTPHARM','DIXON', 'AUROPHARMA', 'GODREJPROP','TRENT', 'OFSS', 'SUNPHARMA',  
+                   'HDFCAMC', 'BAJAJ-AUTO', 'ADANIPORTS', 'ULTRACEMCO', 'ADANIENT','UNITDSPR']
 # Allow user to input tickers or use default
-ticker_input = st.sidebar.text_area("Enter stock tickers (one per line, e.g., RELIANCE.NS):", value="\n".join(default_tickers), height=200)
+ticker_input = st.sidebar.text_area("Enter stock tickers (one per line, e.g., RELIANCE):", value="\n".join(default_tickers), height=200)
 all_tickers = [t.strip().upper() for t in ticker_input.split('\n') if t.strip()]
 
 # Global Filter Logic
@@ -298,7 +300,7 @@ with st.sidebar:
 
 # 15m BB Filter
     st.write("15-Minute Bollinger Bands")
-    enable_bb_15m = st.checkbox("Enable 15m BB Filter", key="enable_bb_15m")
+    enable_bb_15m = st.checkbox("Enable 15m BB Filter", key="enable_bb_15m",value=True)
     bb_15m_period = st.number_input("15m BB Period:", value=50, min_value=1, key="bb_15m_period")
     bb_15m_std_dev = st.number_input("15m BB Std Dev:", value=2.0, min_value=0.1, key="bb_15m_std_dev")
     bb_15m_price_type = st.selectbox("Compare against:", bb_price_comparison_options, key="bb_15m_price_type_15m") # Unique key
@@ -307,7 +309,7 @@ with st.sidebar:
 
 # 1hr BB Filter
     st.write("1-Hour Bollinger Bands")
-    enable_bb_1hr = st.checkbox("Enable 1hr BB Filter", key="enable_bb_1hr")
+    enable_bb_1hr = st.checkbox("Enable 1hr BB Filter", key="enable_bb_1hr",value=True)
     bb_1hr_period = st.number_input("1hr BB Period:", value=50, min_value=1, key="bb_1hr_period")
     bb_1hr_std_dev = st.number_input("1hr BB Std Dev:", value=2.0, min_value=0.1, key="bb_1hr_std_dev")
     bb_1hr_price_type = st.selectbox("Compare against:", bb_price_comparison_options, key="bb_1hr_price_type_1hr") # Unique key
