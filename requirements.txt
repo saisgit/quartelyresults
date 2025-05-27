@@ -9,4 +9,4 @@ pandas_ta
 tradingview_ta
 pandas_market_calendars
 streamlit_autorefresh
-concurrent
+concurrent.futures
