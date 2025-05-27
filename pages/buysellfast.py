@@ -5,7 +5,7 @@ import pandas_ta as ta # Import pandas_ta for Bollinger Bands
 from datetime import datetime, timedelta
 import pytz # For timezone awareness
 import concurrent.futures # For parallelism
-
+from concurrent.futures import ThreadPoolExecutor
 # --- Configuration ---
 st.set_page_config(layout="wide", page_title="Parallel Buy/Sell Stock Screener")
 
