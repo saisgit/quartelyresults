@@ -10,9 +10,7 @@ st.set_page_config(layout="wide")
 # A representative list of F&O stocks (replace with a dynamic source for production)
 # This list is for demonstration purposes.
 # For a real application, consider an API or regularly updated CSV for NSE F&O.
-FUTURES_AND_OPTIONS_STOCKS = [
-    "LICI.NS"
-]
+FUTURES_AND_OPTIONS_STOCKS = ["LICI.NS"]
 
 # Time window for earnings
 DAYS_PRIOR = 2
