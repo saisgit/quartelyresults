@@ -48,7 +48,9 @@ def filter_earnings_by_date(earnings_df, start_date, end_date):
         earnings_df.index = earnings_df.index.tz_localize(None) # Remove timezone for comparison
 
     # Filter by date range
-    filtered_df = earnings_df[(earnings_df.index >= start_date) & (earnings_df.index <= end_date)]
+    #filtered_df = earnings_df[(earnings_df.index >= start_date) & (earnings_df.index <= end_date)]
+    earnings_df.reset_index(inplace=True)
+    filtered_df = earnings_df[earnings_df['Datetime'].dt.date>=start_date]
     return filtered_df
 
 # --- Streamlit App Layout ---
