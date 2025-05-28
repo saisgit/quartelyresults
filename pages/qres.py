@@ -89,7 +89,7 @@ for i, stock in enumerate(FUTURES_AND_OPTIONS_STOCKS):
         filtered_earnings = filter_earnings_by_date(earnings_df, start_date, end_date)
         
         for index, row in filtered_earnings.iterrows():
-            result_date = index.strftime('%Y-%m-%d')
+            result_date = index#.strftime('%Y-%m-%d')
             quarter = row.get('Quarter', 'N/A') # yfinance might not always provide 'Quarter'
             eps_estimate = row.get('EPS Estimate', 'N/A')
             reported_eps = row.get('Reported EPS', 'N/A')
