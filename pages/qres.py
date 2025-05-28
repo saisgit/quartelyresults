@@ -9,13 +9,13 @@ st.set_page_config(layout="wide")
 # A representative list of F&O stocks (replace with a dynamic source for production)
 # This list is for demonstration purposes.
 # For a real application, consider an API or regularly updated CSV for NSE F&O.
-FUTURES_AND_OPTIONS_STOCKS = [
-    "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "ICICIBANK.NS",
-    "SBIN.NS", "BHARTIARTL.NS", "ITC.NS", "LT.NS", "AXISBANK.NS",
-    "MARUTI.NS", "KOTAKBANK.NS", "BAJFINANCE.NS", "ASIANPAINT.NS", "HCLTECH.NS",
-    "ULTRACEMCO.NS", "NESTLEIND.NS", "ADANIENT.NS", "TITAN.NS", "SUNPHARMA.NS",
-    "TATAMOTORS.NS", "GRASIM.NS", "TECHM.NS", "M&M.NS", "NTPC.NS","LICI.NS"
-]
+FUTURES_AND_OPTIONS_STOCKS =[ "LICI.NS"]
+#     "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "ICICIBANK.NS",
+#     "SBIN.NS", "BHARTIARTL.NS", "ITC.NS", "LT.NS", "AXISBANK.NS",
+#     "MARUTI.NS", "KOTAKBANK.NS", "BAJFINANCE.NS", "ASIANPAINT.NS", "HCLTECH.NS",
+#     "ULTRACEMCO.NS", "NESTLEIND.NS", "ADANIENT.NS", "TITAN.NS", "SUNPHARMA.NS",
+#     "TATAMOTORS.NS", "GRASIM.NS", "TECHM.NS", "M&M.NS", "NTPC.NS","LICI.NS"
+# ]
 
 # Time window for earnings
 DAYS_PRIOR = 2
@@ -49,7 +49,7 @@ def filter_earnings_by_date(earnings_df, start_date, end_date):
 
     # Filter by date range
     #filtered_df = earnings_df[(earnings_df.index >= start_date) & (earnings_df.index <= end_date)]
-    #st.write(earnings_df)
+    st.write(earnings_df)
     earnings_df.reset_index(inplace=True)
     filtered_df = earnings_df[earnings_df['Earnings Date'].dt.date>=start_date]
     return filtered_df
