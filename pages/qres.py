@@ -49,9 +49,11 @@ def filter_earnings_by_date(earnings_df, start_date, end_date):
 
     # Filter by date range
     #filtered_df = earnings_df[(earnings_df.index >= start_date) & (earnings_df.index <= end_date)]
+    st.write(start_date)
     st.write(earnings_df)
     earnings_df.reset_index(inplace=True)
     filtered_df = earnings_df[earnings_df['Earnings Date'].dt.date>=start_date]
+    st.write(filtered_df)
     return filtered_df
 
 # --- Streamlit App Layout ---
